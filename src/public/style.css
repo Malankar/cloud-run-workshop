@@ -1,0 +1,91 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #1E1E2E;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+form input {
+  padding: 10px;
+  font-size: 16px;
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+form button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #5c9ded;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+form button:hover {
+  background-color: #4a82d8;
+}
+
+#bookmarksList a {
+  color: #5c9ded;
+  text-decoration: none;
+}
+
+#bookmarksList a:hover {
+  text-decoration: underline;
+}
+
+.bookmark {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+}
+
+#deleteButton {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 7px 15px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+#deleteButton:hover {
+  background-color: darkred;
+}
+
+#updateButton {
+  background-color: green;
+  color: white;
+  border: none;
+  padding: 7px 15px;
+  margin-right: 5px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+#updateButton:hover {
+  background-color: darkgreen;
+}
