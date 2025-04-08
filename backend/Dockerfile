@@ -15,7 +15,6 @@ RUN npm install
 COPY . .
 
 # set the port in the env variable
-
 ENV PORT=3000
 
 # expose the port
