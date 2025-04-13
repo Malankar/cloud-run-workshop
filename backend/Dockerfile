@@ -1,24 +1,25 @@
-# base image
-FROM node:22
+FROM node:22-alpine AS builder
 
-# set the working directory
 WORKDIR /app
 
-# copy package.json and package-lock.json
-COPY package*.json ./
+# Install pnpm globally
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# install dependencies
-# this is only build command and not run command
-RUN npm install
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
-# copy the rest of the application code
 COPY . .
 
-# set the port in the env variable
-ENV PORT=3000
+FROM node:22-alpine
 
-# expose the port
+WORKDIR /app
+
+# Install pnpm in final image (if app needs it at runtime)
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+COPY --from=builder /app ./
+
+ENV PORT=3000
 EXPOSE 3000
 
-# run the app
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
