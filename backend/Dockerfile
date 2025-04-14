@@ -19,7 +19,7 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 
 COPY --from=builder /app ./
 
-ENV PORT=8080
-EXPOSE 8080
+ENV PORT=3000
+EXPOSE 3000
 
 CMD ["pnpm", "start"]
