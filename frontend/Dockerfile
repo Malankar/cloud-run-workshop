@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -8,14 +8,20 @@ RUN npm i -g pnpm
 
 RUN pnpm install
 
-RUN npm i -g serve
-
 COPY . .
 
 RUN pnpm run build
 
-ENV PORT=8080
+FROM node:22-alpine AS production
 
-EXPOSE 8080
+WORKDIR /app
+
+RUN npm i -g serve
+
+COPY --from=builder /app/dist ./dist
+
+ENV PORT=3000
+
+EXPOSE 3000
 
 CMD [ "serve", "-s", "dist" ]
