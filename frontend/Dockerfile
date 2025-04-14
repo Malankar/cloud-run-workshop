@@ -20,8 +20,8 @@ RUN npm i -g serve
 
 COPY --from=builder /app/dist ./dist
 
-ENV PORT=3000
+ENV PORT=8080
 
-EXPOSE 3000
+EXPOSE 8080
 
 CMD [ "serve", "-s", "dist" ]
