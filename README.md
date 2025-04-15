@@ -31,3 +31,71 @@ podman machine start
    ```bash
    podman-compose up --build
    ```
+
+# Google Cloud Run Deployment
+
+## GCloud Authentication
+
+```bash
+gcloud auth login
+gcloud auth configure-docker
+gcloud auth configure-docker us-central1-docker.pkg.dev
+```
+
+If auth fails, try the following command:
+
+```bash
+docker login -u oauth2accesstoken --password-stdin https://$REGION-docker.pkg.dev
+```
+
+## GCP Details
+
+```bash
+PROJECT_ID=cloudrun-workshop-2025
+REGION=us-central1
+REPO=docker-images
+```
+
+## Build and Push Backend
+
+```bash
+docker build --platform linux/amd64 -t $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-backend:latest ./backend
+
+docker push $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-backend:latest
+```
+
+## Build and Push Frontend
+
+```bash
+docker build --platform linux/amd64 -t $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-frontend:latest ./frontend 
+
+docker push $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-frontend:latest
+```
+
+## Deploy Backend
+
+```bash
+gcloud run deploy avdhut-notes-backend \
+  --image $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-backend:latest \
+  --platform managed \
+  --region $REGION \
+  --allow-unauthenticated \
+  --port 8080 \
+  --cpu 1 \
+  --memory 512Mi \
+  --concurrency 100
+```
+
+## Deploy Frontend
+
+```bash
+gcloud run deploy avdhut-notes-frontend \
+  --image $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-frontend:latest \
+  --platform managed \
+  --region $REGION \
+  --allow-unauthenticated \
+  --port 3000 \
+  --cpu 1 \
+  --memory 512Mi \
+  --concurrency 100
+```

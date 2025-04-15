@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Define the API base URL
-const API_URL = "http://localhost:3000/api";
+const API_URL = "https://avdhut-notes-backend-401553303388.us-central1.run.app/api"
 
 // Type definitions for notes
 export interface Note {
@@ -29,6 +29,7 @@ export interface UpdateNoteRequest {
 export const notesApi = {
   // Get all notes
   getAllNotes: async (): Promise<Note[]> => {
+    console.log("API_URL:: ", API_URL);
     const response = await axios.get(`${API_URL}/notes`);
     return response.data;
   },
