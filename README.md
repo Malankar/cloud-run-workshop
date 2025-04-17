@@ -10,6 +10,7 @@ The application is designed to be deployed on Google Cloud Run, utilizing contai
 ## Deployment and Infrastructure
 
 This project includes:
+
 - Docker containers for local development
 - Google Cloud Build for CI/CD automation
 - Terraform configuration for infrastructure as code
@@ -75,7 +76,7 @@ docker push $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-backend:latest
 ## Build and Push Frontend
 
 ```bash
-docker build --platform linux/amd64 -t $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-frontend:latest ./frontend 
+docker build --platform linux/amd64 -t $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-frontend:latest ./frontend
 
 docker push $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-frontend:latest
 ```
@@ -125,6 +126,21 @@ The `/infra` directory contains Terraform configuration files to provision and m
 - `main.tf` - Main configuration for Cloud Run services
 - `variables.tf` - Variable definitions
 - `terraform.tfvars` - Variable values
+
+## Importing Existing Resources
+
+If the Cloud Run services already exist and you're getting errors about resources already existing, import them into your Terraform state:
+
+```bash
+cd infra
+# Set your environment variables
+export PROJECT_ID=cloudrun-workshop-2025
+export REGION=us-central1
+
+# Import existing Cloud Run services
+terraform import google_cloud_run_service.backend $REGION/$PROJECT_ID/avdhut-notes-backend
+terraform import google_cloud_run_service.frontend $REGION/$PROJECT_ID/avdhut-notes-frontend
+```
 
 ## Deploying with Terraform
 
