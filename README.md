@@ -80,7 +80,7 @@ gcloud run deploy avdhut-notes-backend \
   --platform managed \
   --region $REGION \
   --allow-unauthenticated \
-  --port 8080 \
+  --port 3000 \
   --cpu 1 \
   --memory 512Mi \
   --concurrency 100
@@ -94,7 +94,7 @@ gcloud run deploy avdhut-notes-frontend \
   --platform managed \
   --region $REGION \
   --allow-unauthenticated \
-  --port 3000 \
+  --port 8080 \
   --cpu 1 \
   --memory 512Mi \
   --concurrency 100

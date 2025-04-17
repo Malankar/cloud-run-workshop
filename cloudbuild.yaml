@@ -1,0 +1,12 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '--platform', 'linux/amd64', '-t', '$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-backend:latest', './backend']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-backend:latest']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '--platform', 'linux/amd64', '-t', '$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-frontend:latest', './frontend']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-frontend:latest']
