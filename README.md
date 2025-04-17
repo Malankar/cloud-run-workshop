@@ -133,6 +133,7 @@ If the Cloud Run services already exist and you're getting errors about resource
 
 ```bash
 cd infra
+terraform init
 # Set your environment variables
 export PROJECT_ID=cloudrun-workshop-2025
 export REGION=us-central1
@@ -146,7 +147,6 @@ terraform import google_cloud_run_service.frontend $REGION/$PROJECT_ID/avdhut-no
 
 ```bash
 cd infra
-terraform init
 terraform plan
 terraform apply
 ```
