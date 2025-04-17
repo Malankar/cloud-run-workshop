@@ -7,6 +7,14 @@ This project is a full-stack web application that consists of a frontend and a b
 
 The application is designed to be deployed on Google Cloud Run, utilizing containerization for easy deployment and scalability.
 
+## Deployment and Infrastructure
+
+This project includes:
+- Docker containers for local development
+- Google Cloud Build for CI/CD automation
+- Terraform configuration for infrastructure as code
+- Google Cloud Run for serverless container deployment
+
 # To Run the Docker Containers
 
 ## Prerequisites
@@ -99,3 +107,32 @@ gcloud run deploy avdhut-notes-frontend \
   --memory 512Mi \
   --concurrency 100
 ```
+
+# CI/CD with Cloud Build
+
+The project includes a `cloudbuild.yaml` file that automates the build and push process to Google Container Registry. To trigger a build:
+
+```bash
+gcloud builds submit --config=cloudbuild.yaml \
+  --substitutions=_REGION=$REGION,_PROJECT_ID=$PROJECT_ID,_REPO=$REPO
+```
+
+# Infrastructure as Code with Terraform
+
+The `/infra` directory contains Terraform configuration files to provision and manage the Google Cloud Run services.
+
+## Terraform Files
+- `main.tf` - Main configuration for Cloud Run services
+- `variables.tf` - Variable definitions
+- `terraform.tfvars` - Variable values
+
+## Deploying with Terraform
+
+```bash
+cd infra
+terraform init
+terraform plan
+terraform apply
+```
+
+This will create or update the Cloud Run services for both frontend and backend using the infrastructure as code approach, ensuring consistent environments and deployments.
