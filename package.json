@@ -1,0 +1,15 @@
+{
+  "name": "cloud-run-workshop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "source .env && gcloud builds submit --config=cloudbuild.yaml --substitutions=_REGION=$REGION,_PROJECT_ID=$PROJECT_ID,_REPO=$REPO",
+    "deploy:backend": "cd backend && pnpm run deploy",
+    "deploy:frontend": "cd frontend && pnpm run deploy",
+    "deploy": "pnpm run build && pnpm run deploy:backend && pnpm run deploy:frontend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

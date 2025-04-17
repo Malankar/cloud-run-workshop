@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "deploy": "source ../.env && gcloud run deploy avdhut-notes-backend --image $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-backend:latest --platform managed --region $REGION --allow-unauthenticated --port 3000 --cpu 1 --memory 512Mi --concurrency 100"
   },
   "keywords": [],
   "author": "",

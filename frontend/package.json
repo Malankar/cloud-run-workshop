@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "source ../.env && gcloud run deploy avdhut-notes-frontend --image $REGION-docker.pkg.dev/$PROJECT_ID/$REPO/avdhut-notes-frontend:latest --platform managed --region $REGION --allow-unauthenticated --port 8080 --cpu 1 --memory 512Mi --concurrency 100"
   },
   "dependencies": {
     "axios": "^1.8.4",
