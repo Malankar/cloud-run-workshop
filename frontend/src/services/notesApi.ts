@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Define the API base URL
-const API_URL = "https://avdhut-notes-backend-401553303388.us-central1.run.app/api"
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 // Type definitions for notes
 export interface Note {

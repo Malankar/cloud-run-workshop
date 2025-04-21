@@ -10,6 +10,10 @@ RUN pnpm install
 
 COPY . .
 
+ARG VITE_BACKEND_URL
+
+ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
+
 RUN pnpm run build
 
 FROM node:22-alpine AS production
