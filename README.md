@@ -147,7 +147,7 @@ terraform import google_cloud_run_service.frontend $REGION/$PROJECT_ID/avdhut-no
 
 ```bash
 cd infra
-terraform plan
+terraform plan -out=tfplan
 terraform apply
 ```
 
