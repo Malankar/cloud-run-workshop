@@ -114,8 +114,7 @@ gcloud run deploy avdhut-notes-frontend \
 The project includes a `cloudbuild.yaml` file that automates the build and push process to Google Container Registry. To trigger a build:
 
 ```bash
-gcloud builds submit --config=cloudbuild.yaml \
-  --substitutions=_REGION=$REGION,_PROJECT_ID=$PROJECT_ID,_REPO=$REPO
+gcloud builds submit --config=cloudbuild.yaml --substitutions=_REGION=$REGION,_PROJECT_ID=$PROJECT_ID,_REPO=$REPO
 ```
 
 # Infrastructure as Code with Terraform
@@ -137,17 +136,17 @@ terraform init
 # Set your environment variables
 export PROJECT_ID=cloudrun-workshop-2025
 export REGION=us-central1
+export REPO=docker-images
 
 # Import existing Cloud Run services
-terraform import google_cloud_run_service.backend $REGION/$PROJECT_ID/avdhut-notes-backend
-terraform import google_cloud_run_service.frontend $REGION/$PROJECT_ID/avdhut-notes-frontend
+terraform import google_cloud_run_v2_service.backend projects/$PROJECT_ID/locations/$REGION/services/avdhut-notes-backend
+terraform import google_cloud_run_v2_service.frontend projects/$PROJECT_ID/locations/$REGION/services/avdhut-notes-frontend
+terraform import google_artifact_registry_repository.repo projects/$PROJECT_ID/locations/$REGION/repositories/$REPO
 ```
 
 ## Deploying with Terraform
 
 ```bash
-cd infra
-terraform plan -out=tfplan
 terraform apply
 ```
 

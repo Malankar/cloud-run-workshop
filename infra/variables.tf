@@ -10,3 +10,11 @@ variable "repo" {
   description = "The name of the repository."
   type        = string
 }
+variable "backend_image_name" {
+  description = "The name of the backend image."
+  type        = string
+}
+variable "frontend_image_name" {
+  description = "The name of the frontend image."
+  type        = string
+}
