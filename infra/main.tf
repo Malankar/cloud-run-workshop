@@ -8,13 +8,9 @@ resource "google_artifact_registry_repository" "repo" {
   location      = var.region
   repository_id = var.repo
   format        = "DOCKER"
-
-  lifecycle {
-    ignore_changes = all
-  }
 }
 
-resource "null_resource" "build_and_push_image" {
+resource "null_resource" "build_and_push_backend_image" {
   triggers = {
     # Forces re-execution on every terraform apply
     always_run = "${timestamp()}"
@@ -25,7 +21,8 @@ resource "null_resource" "build_and_push_image" {
       # Authenticate Docker with Google Artifact Registry
       cd ..
       gcloud auth configure-docker ${var.region}-docker.pkg.dev
-      gcloud builds submit --config=cloudbuild.yaml --substitutions=_REGION=${var.region},_PROJECT_ID=${var.project_id},_REPO=${var.repo}
+      docker build --platform linux/amd64 -t ${var.region}-docker.pkg.dev/${var.project_id}/${var.repo}/${var.backend_image_name}:latest ./backend
+      docker push ${var.region}-docker.pkg.dev/${var.project_id}/${var.repo}/${var.backend_image_name}:latest
     EOT
   }
 
@@ -33,7 +30,7 @@ resource "null_resource" "build_and_push_image" {
 }
 
 resource "google_cloud_run_v2_service" "backend" {
-  name                = "avdhut-notes-backend"
+  name                = var.backend_image_name
   location            = var.region
   deletion_protection = false
 
@@ -59,11 +56,38 @@ resource "google_cloud_run_v2_service" "backend" {
     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
   }
 
-  depends_on = [null_resource.build_and_push_image]
+  depends_on = [null_resource.build_and_push_backend_image]
+}
+
+# Get the backend URL
+data "google_cloud_run_v2_service" "backend" {
+  name     = var.backend_image_name
+  location = var.region
+
+  depends_on = [google_cloud_run_v2_service.backend]
+}
+
+resource "null_resource" "build_and_push_frontend_image" {
+  triggers = {
+    # Forces re-execution on every terraform apply
+    always_run = "${timestamp()}"
+  }
+
+  provisioner "local-exec" {
+    command = <<EOT
+      # Authenticate Docker with Google Artifact Registry
+      cd ..
+      gcloud auth configure-docker ${var.region}-docker.pkg.dev
+      docker build --platform linux/amd64 --build-arg VITE_BACKEND_URL=${data.google_cloud_run_v2_service.backend.uri} -t ${var.region}-docker.pkg.dev/${var.project_id}/${var.repo}/${var.frontend_image_name}:latest ./frontend
+      docker push ${var.region}-docker.pkg.dev/${var.project_id}/${var.repo}/${var.frontend_image_name}:latest
+    EOT
+  }
+
+  depends_on = [google_cloud_run_v2_service.backend]
 }
 
 resource "google_cloud_run_v2_service" "frontend" {
-  name                = "avdhut-notes-frontend"
+  name                = var.frontend_image_name
   location            = var.region
   deletion_protection = false
 
@@ -89,7 +113,7 @@ resource "google_cloud_run_v2_service" "frontend" {
     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
   }
 
-  depends_on = [null_resource.build_and_push_image, google_cloud_run_v2_service.backend]
+  depends_on = [null_resource.build_and_push_frontend_image]
 }
 
 resource "google_cloud_run_service_iam_member" "backend" {

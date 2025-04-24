@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Define the API base URL
-const API_URL = import.meta.env.VITE_BACKEND_URL;
+const API_URL = import.meta.env.VITE_BACKEND_URL + "/api";
 
 // Type definitions for notes
 export interface Note {
